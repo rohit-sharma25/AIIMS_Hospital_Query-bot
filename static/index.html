@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahayak - AIIMS Jodhpur Patient Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css?v=4">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-container">
+        <!-- Decorative background elements -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <main class="chat-container">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="header-left">
+                <div class="avatar">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    <span class="status-indicator"></span>
+                </div>
+                <div class="header-info">
+                    <h1>Sahayak <span class="hindi-text">(सहायक)</span></h1>
+                    <p>AIIMS Jodhpur Patient Assistant</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" title="Information" id="info-btn"><i class="fa-solid fa-circle-info"></i></button>
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <div class="chat-box" id="chat-box">
+            <!-- Welcome Message -->
+            <div class="message bot-message slide-in">
+                <div class="message-content">
+                    Namaste 🙏! I am Sahayak, the official AI Patient Assistant for AIIMS Jodhpur. 
+                    I can help you with OPD timings, finding departments, booking appointments, and navigating the hospital.
+                    <br><br>
+                    How can I help you today?
+                </div>
+                <div class="msg-controls">
+                    <span class="timestamp">Just now</span>
+                    <button class="tts-btn" title="Read aloud" onclick="if(window.toggleSpeech) window.toggleSpeech(this.parentElement.previousElementSibling.textContent, this)"><i class="fas fa-volume-up"></i></button>
+                </div>
+            </div>
+            
+            <!-- Suggestion Chips -->
+            <div class="suggestion-chips slide-in" style="animation-delay: 0.5s;">
+                <button class="chip" onclick="if(window.sendSuggestion) window.sendSuggestion('📅 Book OPD Appointment')">📅 Book OPD Appointment</button>
+                <button class="chip" onclick="if(window.sendSuggestion) window.sendSuggestion('🩺 Find a Doctor')">🩺 Find a Doctor</button>
+                <button class="chip" onclick="if(window.sendSuggestion) window.sendSuggestion('🚨 Emergency Contacts')">🚨 Emergency Contacts</button>
+                <button class="chip" onclick="if(window.sendSuggestion) window.sendSuggestion('🩸 Blood Bank Info')">🩸 Blood Bank Info</button>
+            </div>
+
+            <!-- Dynamic messages will be appended here -->
+            <div id="dynamic-messages"></div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator-container hidden" id="typing-indicator">
+            <div class="message bot-message">
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <footer class="chat-input-area">
+            <form id="chat-form">
+                <div class="input-wrapper">
+                    <input type="text" id="user-input" placeholder="Ask about doctors, timings, facilities..." autocomplete="off" required>
+                    <button type="button" id="mic-btn" title="Voice input">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+                    <button type="submit" id="send-btn" title="Send message">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="disclaimer">
+                Sahayak provides general information and is not a substitute for professional medical advice.
+            </div>
+        </footer>
+    </main>
+
+    <!-- Info Modal -->
+    <div class="modal hidden" id="info-modal">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            <h2>About Sahayak</h2>
+            <p>Sahayak is an AI assistant designed to help patients and visitors at AIIMS Jodhpur.</p>
+            <ul>
+                <li>OPD Schedules & Timings</li>
+                <li>Department & Faculty Information</li>
+                <li>Hospital Facilities & Navigation</li>
+                <li>Emergency Contacts</li>
+            </ul>
+            <p><em>Note: Always consult the official helpdesk for real-time cabin numbers or urgent doctor availability.</em></p>
+        </div>
+    </div>
+
+    <script src="/static/script.js?v=4"></script>
+</body>
+</html>
