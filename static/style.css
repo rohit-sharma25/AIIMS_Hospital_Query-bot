@@ -5,7 +5,7 @@
     --secondary-color: #1e3a8a; /* Blue 900 */
     
     --bg-color: #f0fdfa; /* Teal 50 */
-    --chat-bg: rgba(255, 255, 255, 0.85);
+    
     
     --text-main: #1f2937;
     --text-muted: #6b7280;
@@ -28,15 +28,13 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    
-    /* 👇 REPLACE THE URL BELOW WITH THE PATH TO YOUR AIIMS IMAGE 👇 */
-    /* Example: background-image: url('aiims_jodhpur.jpg'); */
-    background-image: url('PUT_YOUR_IMAGE_PATH_HERE.jpg');
+    background:
+        linear-gradient(135deg, rgba(13, 148, 136, 0.30), rgba(15, 23, 42, 0.25)),
+        url('aiims_jodhpur.jpg');
+    background-color: #f0fdfa;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    
+    background-attachment: fixed;
     color: var(--text-main);
     height: 100vh;
     display: flex;
@@ -46,7 +44,7 @@ body {
     position: relative;
 }
 
-/* Background elements for modern look */
+/* Background elements — subtle colored glows over the photo */
 .background-container {
     position: absolute;
     top: 0;
@@ -59,46 +57,46 @@ body {
 
 .blob {
     position: absolute;
-    filter: blur(80px);
-    opacity: 0.6;
+    filter: blur(100px);
+    opacity: 0.15;
     border-radius: 50%;
-    animation: float 10s infinite ease-in-out alternate;
+    animation: float 12s infinite ease-in-out alternate;
 }
 
 .blob-1 {
-    top: -10%;
-    left: -10%;
-    width: 50vw;
-    height: 50vw;
+    top: -8%;
+    left: -8%;
+    width: 40vw;
+    height: 40vw;
     background: #5eead4; /* Teal 300 */
 }
 
 .blob-2 {
-    bottom: -20%;
-    right: -10%;
-    width: 60vw;
-    height: 60vw;
+    bottom: -15%;
+    right: -8%;
+    width: 50vw;
+    height: 50vw;
     background: #93c5fd; /* Blue 300 */
-    animation-delay: -5s;
+    animation-delay: -6s;
 }
 
 @keyframes float {
     0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(5%, 10%) scale(1.05); }
+    100% { transform: translate(4%, 8%) scale(1.03); }
 }
 
-/* Main Chat Container - Glassmorphism */
+/* Main Chat Container - Glassmorphism (shows AIIMS photo through blur) */
 .chat-container {
     width: 100%;
     max-width: 480px;
     height: 90vh;
     max-height: 850px;
-    background: var(--chat-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.80);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-soft);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -186,7 +184,7 @@ body {
     background: var(--primary-light);
 }
 
-/* Chat Box */
+/* Chat Box — message area with AIIMS wallpaper */
 .chat-box {
     flex: 1;
     padding: 20px;
@@ -195,6 +193,12 @@ body {
     flex-direction: column;
     gap: 16px;
     scroll-behavior: smooth;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90)),
+        url('aiims_jodhpur.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    background-attachment: local;
 }
 
 /* Scrollbar styling */
@@ -399,6 +403,12 @@ input[type="text"]::placeholder {
     color: #9ca3af;
 }
 
+input[type="text"]:disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 #send-btn {
     width: 40px;
     height: 40px;
@@ -420,6 +430,26 @@ input[type="text"]::placeholder {
 
 #send-btn:active {
     transform: scale(0.95);
+}
+
+#send-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+#send-btn.loading {
+    background: var(--primary-hover);
+    pointer-events: none;
+}
+
+#send-btn.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 #mic-btn {

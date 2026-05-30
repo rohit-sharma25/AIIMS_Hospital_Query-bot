@@ -93,21 +93,46 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('send-btn').click();
     };
 
+    function setLoadingState(loading) {
+        const sendBtn = document.getElementById('send-btn');
+        const sendIcon = sendBtn.querySelector('i');
+        
+        if (loading) {
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+            sendBtn.classList.add('loading');
+            sendIcon.className = 'fa-solid fa-spinner';
+        } else {
+            userInput.disabled = false;
+            sendBtn.disabled = false;
+            sendBtn.classList.remove('loading');
+            sendIcon.className = 'fa-solid fa-paper-plane';
+            userInput.focus();
+        }
+    }
+
     // Chat Logic
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const message = userInput.value.trim();
         if (!message) return;
+        
+        // Prevent duplicate submissions while loading
+        const sendBtn = document.getElementById('send-btn');
+        if (sendBtn.classList.contains('loading')) return;
 
-        // 1. Add user message to chat
+        // 1. Disable input and show loading state
+        setLoadingState(true);
+        
+        // 2. Add user message to chat
         appendMessage(message, 'user');
         userInput.value = '';
         
-        // 2. Show typing indicator
+        // 3. Show typing indicator
         showTypingIndicator();
 
-        // 3. Send to API
+        // 4. Send to API
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
@@ -119,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
             
-            // 4. Hide typing indicator and show bot response
+            // 5. Hide typing indicator and show bot response
             hideTypingIndicator();
             appendMessage(data.response, 'bot');
             
@@ -127,6 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             hideTypingIndicator();
             appendMessage("I'm sorry, I am having trouble connecting to the server right now. Please try again later.", 'bot');
+        } finally {
+            // 6. Re-enable input
+            setLoadingState(false);
         }
     });
 

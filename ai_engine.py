@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-api_key = os.getenv("GEMINI_API_KEY")
 
 class SahayakChatbot:
     def __init__(self):
@@ -175,7 +174,7 @@ Sahayak:
 
 - **Head of Department:** Dr. Surender Deora
 - **Telemedicine:** 8764505053
-- **OPD Registration:** Somvar–Shukravar, subah 8:00 baje se 12:00 baje tak
+- **OPD Registration:** Somvar–Shanivar, subah 8:00 baje se 12:00 baje tak
 - **Registration Fee:** Sirf ₹20
 
 Online appointment ke liye **AIIMS Jodhpur Swasthya App** ya **ors.gov.in** use karein.
@@ -209,7 +208,7 @@ User: "How do I book an appointment at AIIMS Jodhpur?"
 Sahayak:
 "You can book an OPD appointment in 3 ways:
 
-1. **Walk-in:** OPD Registration Counter, Ground Floor — Mon to Fri, 8:00 AM–12:00 PM.
+1. **Walk-in:** OPD Registration Counter, Ground Floor — Mon to Sat, 8:00 AM–12:00 PM.
    Bring a photo ID and ₹20 registration fee.
 2. **Online:** Visit **ors.gov.in** → Select Rajasthan → AIIMS Jodhpur →
    Choose your department → Pick a date → Confirm.
@@ -256,6 +255,12 @@ Aap seedha andar aa sakte hain. Kya main aapko sahi department dhundhne mein hel
 [END OF KNOWLEDGE BASE]
 """
         self.history = []
+        self.max_history = 30
+
+    def _trim_history(self):
+        """Keep conversation history within the max limit by removing oldest entries."""
+        if len(self.history) > self.max_history:
+            self.history.pop(0)
 
     def get_response(self, user_message: str) -> str:
         # Reload the .env file dynamically in case it was updated while the server was running
@@ -266,6 +271,7 @@ Aap seedha andar aa sakte hain. Kya main aapko sahi department dhundhne mein hel
              return "System Error: Groq API Key is not configured. Please add GROQ_API_KEY to your .env file and save it."
         
         self.history.append({"role": "user", "content": user_message})
+        self._trim_history()
 
         url = "https://api.groq.com/openai/v1/chat/completions"
         headers = {
@@ -282,6 +288,7 @@ Aap seedha andar aa sakte hain. Kya main aapko sahi department dhundhne mein hel
             "temperature": 0.3
         }
 
+        response = None
         try:
             response = requests.post(url, headers=headers, json=payload)
             response.raise_for_status()
@@ -289,12 +296,13 @@ Aap seedha andar aa sakte hain. Kya main aapko sahi department dhundhne mein hel
             
             bot_reply = data['choices'][0]['message']['content']
             self.history.append({"role": "assistant", "content": bot_reply})
+            self._trim_history()
             
             return bot_reply
         except Exception as e:
             if len(self.history) > 0:
                 self.history.pop()
             print("Groq Error:", e)
-            if 'response' in locals() and response is not None:
+            if response is not None:
                 print("Response text:", response.text)
             return f"I apologize, but I am facing some technical difficulties right now. Please try again later. Error: {str(e)}"
