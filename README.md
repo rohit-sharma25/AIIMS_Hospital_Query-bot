@@ -4,7 +4,7 @@ An intelligent chatbot designed to assist patients, attendants, and visitors at 
 
 ---
 
-## Features
+## Features of this bot 
 
 - 🏥 **Department & Doctor Queries** — Find the right doctor/department for your health concern
 - 📅 **OPD Appointment Booking** — Walk-in timings, online booking via ORS portal, Swasthya app
@@ -18,7 +18,7 @@ An intelligent chatbot designed to assist patients, attendants, and visitors at 
 
 ---
 
-## Tech Stack
+## Tech Stack which is intigrated  
 
 | Component | Technology |
 |-----------|-----------|
